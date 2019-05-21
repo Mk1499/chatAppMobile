@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Container, Header, Content, List, ListItem, Thumbnail, Text, Left, Body, Right, Button } from 'native-base';
 // import userMaleAvator from '../../assets/images/maleuser' ; 
 // import Icon from 'react-native-vector-icons/Ionicons' ;
-import logo from '../../assets/images/logo.jpg' ;
+// import avatar from '../../assets/images/maleuser.png'  ;
 import { Font, AppLoading } from "expo";
 
 
@@ -37,7 +37,7 @@ export default class UsersList extends Component {
           <List>
             <ListItem thumbnail>
               <Left>
-                <Thumbnail square source={{ uri: '../../assets/images/maleuser.png' }} />
+                <Thumbnail square source={{uri:'https://www.shareicon.net/data/2016/05/26/771203_man_512x512.png'}}/>
               </Left>
               <Body>
                 <Text>Sankhadeep</Text>
