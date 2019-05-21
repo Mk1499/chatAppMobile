@@ -24,11 +24,11 @@ export default class UsersList extends Component {
   render() {
   
   
-    // if (this.state.loading){
-    //   return (
-    //     <AppLoading />
-    //   ) ; 
-    // } else {
+    if (this.state.loading){
+      return (
+        <AppLoading />
+      ) ; 
+    } else {
 
     return (
         <Container>
@@ -57,4 +57,4 @@ export default class UsersList extends Component {
   }
 
   }
-// }
+}
