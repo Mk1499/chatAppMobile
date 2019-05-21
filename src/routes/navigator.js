@@ -10,25 +10,13 @@ import { Text } from 'react-native';
 import Profile from '../screens/ProfileScreen';
 import Login from '../screens/LoginScreen';
 import Registration from '../screens/RegistrationScreen';
+import UsersList from '../screens/UsersListScreen' ; 
 
-const HomeRoute = createStackNavigator({
-  Login:{
-    screen:Login , 
-    navigationOptions: () => ({
-      headerTitle :'Login'
-    })
-  },
-  Registration:{
-    screen:Registration , 
-    navigationOptions: ()=>({
-      headerTitle : "Registration"
-    })
-  },
-})
+
 
 const main = createBottomTabNavigator({
-  Home:{
-      screen: HomeRoute , 
+  UsersList:{
+      screen: UsersList , 
       navigationOptions: {
           tabBarIcon: ({tintColor})=>{
               return <FontAwesome name="home" color={tintColor} size={20} />
@@ -46,7 +34,33 @@ const main = createBottomTabNavigator({
   },
 }, {})
 
+const HomeRoute = createStackNavigator({
+  Login:{
+    screen:Login , 
+    navigationOptions: () => ({
+      headerTitle :null , 
+      header:null 
+    })
+  },
+  Registration:{
+    screen:Registration , 
+    navigationOptions: ()=>({
+      headerTitle : "Registration" , 
+      header : null
+    })
+  },
+  Profile : {
+    screen : main , 
+    navigationOptions: () => ({
+      headerTitle : "Profile" ,
+      header : null
+    })
+  }
+})
+
+
+
 const screens = createStackNavigator({ main }, { defaultNavigationOptions: { header: null } })
 
-const AppNavigation = createAppContainer(screens)
+const AppNavigation = createAppContainer(HomeRoute)
 export default AppNavigation;

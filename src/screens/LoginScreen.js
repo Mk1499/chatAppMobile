@@ -61,7 +61,10 @@ export default class Login extends React.Component {
       password: this.state.password
     }),
   }).then(response => {
-    console.log(response) ; 
+    console.log('status : ' , response.status) ;
+    if(response.status===200){
+      this.props.navigation.navigate("Profile",{})
+    } 
 
   }) ; 
 }
