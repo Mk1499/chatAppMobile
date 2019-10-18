@@ -10,18 +10,53 @@ import {
    TouchableOpacity ,
    KeyboardAvoidingView ,
    ScrollView , 
-   Alert
+   Alert , 
+   Button , 
+   Platform
 
    } from 'react-native';
 
+
+import {ImagePicker} from 'expo' ; 
+
+import ImgToBase64 from 'react-native-image-base64';
+
 import {MyContext} from '../../App' ; 
  import bgImage from '../../assets/images/background.jpeg' ;
- import logo from '../../assets/images/logo.jpg' ;
+ import logo from '../../assets/images/logo.png' ;
  import Icon from 'react-native-vector-icons/Ionicons' ;
 
 const {width : WIDTH , height : Hieght} = Dimensions.get('window') ;
 
+// const options = {
+//   title: 'Select Avatar',
+//   customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
+//   storageOptions: {
+//     skipBackup: true,
+//     path: 'images',
+//   },
+// };
  
+// ImagePicker.showImagePicker(options, (response) => {
+//   console.log('Response = ', response);
+
+//   if (response.didCancel) {
+//     console.log('User cancelled image picker');
+//   } else if (response.error) {
+//     console.log('ImagePicker Error: ', response.error);
+//   } else if (response.customButton) {
+//     console.log('User tapped custom button: ', response.customButton);
+//   } else {
+//     const source = { uri: response.uri };
+
+//     // You can also display the image using data:
+//     // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+
+//     this.setState({
+//       avatarSource: source,
+//     });
+//   }
+// });
 
 export default class Registration extends React.Component {
 
@@ -35,9 +70,71 @@ export default class Registration extends React.Component {
       username : '' , 
       email : '' , 
       password1:'' ,
-      password2:''
+      password2:'' , 
+      photo : null 
     }
   }
+
+  
+  _pickImage = async () => {
+    const options = {
+      noData: true,
+    }
+
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+    });
+
+    console.log(result);
+    
+    if (!result.cancelled) {
+      console.log("HERER")
+      // this.state.photo.append('fileName','img') ; 
+    console.log(this.state.photo);
+
+      this.setState({ photo: result });
+    }
+  }
+
+   createFormData = (photo, body) => {
+    const data = new FormData();
+    
+  
+    data.append("photo", {
+      // name: photo.fileName,
+      type: photo.type,
+      uri:
+        Platform.OS === "android" ? photo.uri : photo.uri.replace("file://", "")
+    });
+  
+    Object.keys(body).forEach(key => {
+      data.append(key, body[key]);
+    });
+  
+    return data;
+  };
+
+
+handleUploadPhoto = () => {
+  fetch("http://192.168.1.7:3000/addImage", {
+    method: "POST",
+    body: this.createFormData(this.state.photo, { userId: "123" }) 
+    // body : "dd"
+  })
+    .then(response => response.json())
+    .then(response => {
+      console.log("upload succes", response);
+      alert("Upload success!");
+      this.setState({ photo: null });
+    })
+    .catch(error => {
+      console.log("upload error", error);
+      alert("Upload failed!");
+    });
+};
+
+
 
 
   showPass = ()=>{
@@ -53,6 +150,53 @@ export default class Registration extends React.Component {
       }) ;
     }
   }
+
+  // uploadImg =  () => {
+
+
+
+  //   var photo = {
+  //     uri: "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540mk14%252Fmobile/ImagePicker/365ad8ee-a595-49c9-bca9-0d6b8475ffde.jpg",
+  //     type: 'image/jpeg',
+  //     name: 'photo.jpg',
+  // };
+  
+  // var body = new FormData();
+  // body.append('authToken', 'secret');
+  // body.append('photo', photo);
+  // body.append('title', 'A beautiful photo!');
+  
+  // var xhr = new XMLHttpRequest();
+  // xhr.open('POST', "http://192.168.1.7:3000/addImage");
+  // console.log(body)
+  // xhr.send(body);
+
+
+//     const data = new FormData();
+//     data.append('name', 'testName'); // you can append anyone.
+//      data.append('photo', {
+//     uri: "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540mk14%252Fmobile/ImagePicker/365ad8ee-a595-49c9-bca9-0d6b8475ffde.jpg",
+//     type: 'image/jpeg', // or photo.type
+//     name: 'testPhotoName'
+// });
+// data.append('authToken', 'secret');
+
+
+// console.log('data : ', data) ; 
+
+//  fetch("http://192.168.1.7:3000/addImage", {
+//   method: 'POST',
+//   headers: {
+//     Accept: 'application/json',
+//     'Content-Type':'multipart/form-data'
+//   },
+//   body:data
+
+// }).then(res => {
+//   console.log(res)
+// });
+  // }
+ 
  
   addAccount = () => {
     if (this.state.password1 === this.state.password2)
@@ -99,6 +243,7 @@ export default class Registration extends React.Component {
   
 
   render() {
+    const { photo } = this.state
     return (
   <MyContext.Consumer>
      {
@@ -111,7 +256,7 @@ export default class Registration extends React.Component {
            <KeyboardAvoidingView behavior="position">
               <View style = {styles.logoContainer}>
                 <Image source={logo} style = {styles.logo}  />
-                <Text style = {styles.logoText}>MK14 Chat</Text>
+                {/* <Text style = {styles.logoText}>MK14 Chat</Text> */}
               </View>
 
                 {/* User Name View  */}
@@ -134,7 +279,7 @@ export default class Registration extends React.Component {
 
               {/* Email View  */}
               <View style = {styles.inputContainer}>
-              <Icon name = {'ios-person'} size = {28} color= {'rgba(255,255,255,0.7)'}
+              <Icon name = {'ios-mail'} size = {28} color= {'rgba(255,255,255,0.7)'}
                 style = {styles.inputIcon}
               />
 
@@ -199,6 +344,24 @@ export default class Registration extends React.Component {
 
           </KeyboardAvoidingView>
 
+          {/* <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        {photo && (
+          <Image
+            source={{ uri: photo.uri }}
+            style={{ width: 30, height: 30 }}
+          />
+        )}
+        <Button title="Choose Photo" onPress={this._pickImage} />
+        <Button title="Upload" onPress={this.handleUploadPhoto} />
+      </View> */}
+
+          {/* <TouchableOpacity 
+            onPress = {this._pickImage}
+            // onPress = {this.uploadImg}
+          ><Text>Select Image </Text></TouchableOpacity> */}
+
+          
+
           <TouchableOpacity style={styles.btnLogin}
             onPress = {this.addAccount}
             >
@@ -242,7 +405,6 @@ export default class Registration extends React.Component {
     width:120 ,
     height:120 ,
     borderRadius : 20 ,
-    opacity : 0.7
   } ,
   logoContainer : {
     alignItems : 'center'

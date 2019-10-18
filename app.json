@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Chat App",
-    "slug": "mobile",
+    "name": "Scorpion Chat",
+    "slug": "scorpionChat",
     "privacy": "public",
     "sdkVersion": "32.0.0",
     "platforms": [
@@ -11,10 +11,15 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "loading": {
+      "icon": "./assets/back.png",
+      "hideExponentText": false , 
+      "backgroundColor": "#152431",
+    },
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "image": "./assets/back.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#152431"
     },
     "updates": {
       "fallbackToCacheTimeout": 0

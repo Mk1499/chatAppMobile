@@ -1,0 +1,37 @@
+import React, { Component } from 'react'
+import {Container , Text , Card , Button} from 'native-base' ; 
+import Context from '../config/Context' ; 
+import ContextProvider from '../provider/ContextProvider' ; 
+import {MyContext} from '../../App' ; 
+
+export default class Chat extends React.Component {
+
+    constructor(props){
+        super(props) ; 
+        console.log("Props : " , props)
+        this.state = {
+            email : this.props.navigation.getParam("email")
+        }
+
+    }
+
+render(){
+    return(
+        <MyContext.Consumer>
+            {(context)=>
+                   <Container>
+                   <Text>Start Chat Room {this.state.email}  </Text>
+                           <Text>
+                               Current User Email : {context.state.email}
+                           </Text>
+                   
+       
+       
+               </Container>
+            }
+        </MyContext.Consumer>
+     
+    );
+}
+
+}

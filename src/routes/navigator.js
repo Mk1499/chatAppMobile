@@ -5,18 +5,29 @@ import {
   createStackNavigator,
 } from 'react-navigation';
 import { Entypo , FontAwesome} from "@expo/vector-icons" 
-import { Text } from 'react-native';
+import { View , Text } from 'react-native';
+import {Header , Thumbnail} from 'native-base' ; 
 
 import Profile from '../screens/ProfileScreen';
 import Login from '../screens/LoginScreen';
 import Registration from '../screens/RegistrationScreen';
-import UsersList from '../screens/UsersListScreen' ; 
+import Home from '../screens/HomeScreen' ; 
+import Chat from '../screens/ChatScreen' ; 
 
 
+const usersChat = createStackNavigator({
+  Home : {
+    screen:Home , 
+  } , 
+  ChatRoom : {
+    screen : Chat 
+  }
+} , {headerLayoutPreset: 'center'})
 
-const main = createBottomTabNavigator({
+
+const main = createStackNavigator({
   UsersList:{
-      screen: UsersList , 
+      screen: usersChat , 
       navigationOptions: {
           tabBarIcon: ({tintColor})=>{
               return <FontAwesome name="home" color={tintColor} size={20} />
@@ -32,7 +43,9 @@ const main = createBottomTabNavigator({
       }
     }
   },
-}, {})
+}, {}) ; 
+
+
 
 const HomeRoute = createStackNavigator({
   Login:{
@@ -50,7 +63,7 @@ const HomeRoute = createStackNavigator({
     })
   },
   Profile : {
-    screen : main , 
+    screen : usersChat , 
     navigationOptions: () => ({
       headerTitle : "Profile" ,
       header : null
@@ -60,7 +73,8 @@ const HomeRoute = createStackNavigator({
 
 
 
-const screens = createStackNavigator({ main }, { defaultNavigationOptions: { header: null } })
+// const screens = createStackNavigator({ main }, { defaultNavigationOptions: { header: null } })
+const screens = createStackNavigator({ HomeRoute }, { defaultNavigationOptions: { header: null } })
 
 const AppNavigation = createAppContainer(HomeRoute)
 export default AppNavigation;
